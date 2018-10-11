@@ -1,0 +1,13 @@
+﻿-> Nuget Package Manager in Visual Studio is required
+-> Install-Package Newtonsoft.Json -Version 11.0.2
+-> Install-Package SqlServerCompact -Version 4.0.8854.1
+-> Microsoft SQL Server Compact 4.0 https://www.microsoft.com/en-in/download/details.aspx?id=17876
+-> Visual Studio Extension - Sql Server Compact  Toolbox
+-> Install-Package WebSocket4Net -Version 0.15.2
+
+// For SignalRHub -- https://www.codeproject.com/Articles/804770/Implementing-SignalR-in-Desktop-Applications
+Install-Package Microsoft.AspNet.SignalR.SelfHost
+Install-Package Microsoft.Owin.Cors
+
+// For SignalR Client
+Install-Package Microsoft.AspNet.SignalR.Client
