@@ -32,6 +32,7 @@
 			this.forgot_password_link_label = new System.Windows.Forms.LinkLabel();
 			this.LoginSignUpProgressBar = new System.Windows.Forms.ProgressBar();
 			this.LoginSingUpBackgroundWorker = new System.ComponentModel.BackgroundWorker();
+			this.connectClipSyncButton = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// Login_Button
@@ -39,7 +40,7 @@
 			this.Login_Button.Location = new System.Drawing.Point(180, 244);
 			this.Login_Button.Name = "Login_Button";
 			this.Login_Button.Size = new System.Drawing.Size(75, 23);
-			this.Login_Button.TabIndex = 0;
+			this.Login_Button.TabIndex = 3;
 			this.Login_Button.Text = "Login";
 			this.Login_Button.UseVisualStyleBackColor = true;
 			this.Login_Button.Click += new System.EventHandler(this.Login_Button_Click);
@@ -49,7 +50,7 @@
 			this.Sign_Up_Button.Location = new System.Drawing.Point(301, 244);
 			this.Sign_Up_Button.Name = "Sign_Up_Button";
 			this.Sign_Up_Button.Size = new System.Drawing.Size(75, 23);
-			this.Sign_Up_Button.TabIndex = 0;
+			this.Sign_Up_Button.TabIndex = 4;
 			this.Sign_Up_Button.Text = "Sign Up";
 			this.Sign_Up_Button.UseVisualStyleBackColor = true;
 			this.Sign_Up_Button.Click += new System.EventHandler(this.Sign_Up_Button_Click);
@@ -84,7 +85,7 @@
 			this.Password_text_box.Location = new System.Drawing.Point(180, 181);
 			this.Password_text_box.Name = "Password_text_box";
 			this.Password_text_box.Size = new System.Drawing.Size(196, 20);
-			this.Password_text_box.TabIndex = 1;
+			this.Password_text_box.TabIndex = 2;
 			// 
 			// forgot_password_link_label
 			// 
@@ -110,11 +111,22 @@
 			this.LoginSingUpBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.LoginSingUpBackgroundWorker_ProgressChanged);
 			this.LoginSingUpBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.LoginSingUpBackgroundWorker_RunWorkerCompleted);
 			// 
+			// connectClipSyncButton
+			// 
+			this.connectClipSyncButton.Location = new System.Drawing.Point(509, 139);
+			this.connectClipSyncButton.Name = "connectClipSyncButton";
+			this.connectClipSyncButton.Size = new System.Drawing.Size(122, 23);
+			this.connectClipSyncButton.TabIndex = 5;
+			this.connectClipSyncButton.Text = "Connect ClipSync";
+			this.connectClipSyncButton.UseVisualStyleBackColor = true;
+			this.connectClipSyncButton.Click += new System.EventHandler(this.connectClipSyncButtonClick);
+			// 
 			// LoginSignUpForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(800, 450);
+			this.Controls.Add(this.connectClipSyncButton);
 			this.Controls.Add(this.LoginSignUpProgressBar);
 			this.Controls.Add(this.forgot_password_link_label);
 			this.Controls.Add(this.password_label);
@@ -142,5 +154,6 @@
 		private System.Windows.Forms.LinkLabel forgot_password_link_label;
 		private System.Windows.Forms.ProgressBar LoginSignUpProgressBar;
 		private System.ComponentModel.BackgroundWorker LoginSingUpBackgroundWorker;
+		private System.Windows.Forms.Button connectClipSyncButton;
 	}
 }

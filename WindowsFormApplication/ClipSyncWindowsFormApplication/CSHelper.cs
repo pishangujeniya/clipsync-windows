@@ -20,7 +20,7 @@ namespace ClipSync {
 					return nic.GetPhysicalAddress().ToString();
 				}
 			}
-			return "";
+			return "UNKNOWN";
 		}
 	}
 }

@@ -34,11 +34,11 @@
             this.login_button = new System.Windows.Forms.Button();
             this.sign_up_button = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // notifyIcon1
-            // 
-            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Text = "ClipSync Service is Running";
+			// 
+			// notifyIcon1
+			// 
+			//this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+			this.notifyIcon1.Text = "ClipSync Service is Running";
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick_1);
             // 
@@ -69,7 +69,7 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.sign_up_button);
             this.Controls.Add(this.login_button);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            //this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
