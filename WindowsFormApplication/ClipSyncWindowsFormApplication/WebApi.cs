@@ -14,6 +14,7 @@ namespace ClipSync
 		public static string recieve_copied_text_signalr_method_name = "ReceiveCopiedText";
 		public static string send_copied_text_signalr_method_name = "SendCopiedText";
 		public static string copied_watermark = "- Copied By ClipSync";
+		public static int number_of_seconds_interval_between_copy = 3;
 		public static string login_api = "LogIn.php";
         public static string sign_up_api = api_domain + "SignUp.php";
         public static string get_clips_api = api_domain + "GetClips.php";

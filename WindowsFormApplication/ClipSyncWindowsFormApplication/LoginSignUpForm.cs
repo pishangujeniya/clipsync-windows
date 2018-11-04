@@ -31,6 +31,8 @@ namespace ClipSync {
 		private string LoginApi = WebApi.login_api;
 		private string SignUpApi = WebApi.sign_up_api;
 
+		public string mTime = DateTime.Now.ToLongTimeString();
+
 		private CSHelper cSHelper;
 
 		public IHubProxy _hub;
@@ -162,9 +164,13 @@ namespace ClipSync {
 				if (m.Msg == NativeMethods.WM_CLIPBOARDUPDATE) {
 					string copied_content = (string)iData.GetData(DataFormats.Text);
 					//do something with it
-					if (!copied_content.Contains(WebApi.copied_watermark)) {
-						Console.WriteLine(copied_content);
-						_hub.Invoke(WebApi.send_copied_text_signalr_method_name, copied_content);
+					if (copied_content!= null && !copied_content.Contains(WebApi.copied_watermark) && copied_content.Length > 0) {
+						double lastTime = TimeSpan.Parse(mTime).Seconds;
+						mTime = DateTime.Now.ToLongTimeString();
+						if ((TimeSpan.Parse(mTime).Seconds - lastTime) > WebApi.number_of_seconds_interval_between_copy) {
+							Console.WriteLine(copied_content);
+							_hub.Invoke(WebApi.send_copied_text_signalr_method_name, copied_content);
+						}
 					}
 				} else if (iData.GetDataPresent(DataFormats.Bitmap)) {
 					//Bitmap image = (Bitmap)iData.GetData(DataFormats.Bitmap);   // Clipboard image
