@@ -1,5 +1,5 @@
 ﻿namespace ClipSync {
-	partial class LoginSignUpForm {
+	partial class ClipSyncControlForm {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -209,7 +209,7 @@
             this.Controls.Add(this.clientGroupBox);
             this.Controls.Add(this.consoleTextBox);
             this.Name = "LoginSignUpForm";
-            this.Text = "LoginSignUpForm";
+            this.Text = "ClipSync - Controller";
             this.Load += new System.EventHandler(this.LoginSignUpForm_Load);
             this.clientGroupBox.ResumeLayout(false);
             this.clientGroupBox.PerformLayout();

@@ -1,15 +1,16 @@
-﻿using System;
+﻿using ClipSync.Models;
+using ClipSync.SignalR;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
+using System;
 using System.Collections;
 using System.Threading.Tasks;
-using ClipSync.Models;
 using System.Windows.Forms;
 
 namespace ClipSync.SignalR {
+
     [HubName("SignalRHub")]
     public class SignalRHub : Hub {
-
 
         public override bool Equals(object obj) {
             return base.Equals(obj);
@@ -28,7 +29,8 @@ namespace ClipSync.SignalR {
             string onConnectLog = String.Format("uid  : {0} | platform : {1} | device_id : {2} | connectionID : {3}", uid, platform, device_id, connectionID);
             Console.WriteLine(onConnectLog);
 
-            //
+            //MessageBox.Show(onConnectLog);
+            //Program.loginSignUpForm.LogWriter(onConnectLog);
 
             Users.AddUserConnection(uid, new UserConnection(platform, device_id, connectionID));
             return base.OnConnected();

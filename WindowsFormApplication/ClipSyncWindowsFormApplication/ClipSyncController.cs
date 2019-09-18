@@ -1,15 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Windows.Forms;
-using Microsoft.AspNet.SignalR.Client;
-using System.Runtime.InteropServices;
+﻿using ClipSync.Models;
 using ClipSync.SignalR;
+using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Client;
+using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.Owin.Hosting;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ClipSync {
 
-    public partial class LoginSignUpForm : Form {
+    public partial class ClipSyncControlForm : Form {
 
         public string mTime = DateTime.Now.ToLongTimeString();
 
@@ -17,22 +21,19 @@ namespace ClipSync {
 
         public IHubProxy _hub;
 
-        bool isSignalRConnected = false;
+        private IDisposable SignalR { get; set; }
 
-        static LoginSignUpForm loginFormHandle = null;
+        bool isSignalRConnected = false;
 
         public string uid = "";
 
-        public LoginSignUpForm() {
+        internal ClipSyncControlForm() {
             InitializeComponent();
             this.cSHelper = new CSHelper();
         }
 
-
         private void LoginSignUpForm_Load(object sender, EventArgs e) {
             try {
-
-                loginFormHandle = this;
 
                 this.LogWriter("-------------------");
                 this.LogWriter("Enter address and port then start server and wait.");
@@ -42,7 +43,8 @@ namespace ClipSync {
                 this.serverAddressTextBox.Text = "*";
                 //this.serverAddressTextBox.Text = "localhost";
 
-                this.connectUidTextBox.Text = new Random().Next().ToString();
+                this.connectUidTextBox.Text = new Random().Next(1000, 9999).ToString();
+
 
             } catch (Exception ex) {
                 this.LogWriter(ex.ToString());
@@ -71,6 +73,7 @@ namespace ClipSync {
                 isSignalRConnected = true;
             } catch (Exception ex) {
                 isSignalRConnected = false;
+                Login_Button.Enabled = true;
                 this.LogWriter("Exception in connecting to SignalR Hub : " + ex.ToString());
             }
 
@@ -105,11 +108,13 @@ namespace ClipSync {
             string url = "http://" + "*" + ":" + this.serverPortTextBox.Text + "/";
             this.LogWriter(url);
             try {
-                var SignalR = WebApp.Start<Startup>(url);
+                //SignalR = WebApp.Start<Startup>(url);
+                SignalR = WebApp.Start(url);
                 this.LogWriter(string.Format("Server running at {0}", url + "signalr/hubs"));
                 this.LogWriter("Your ip is: " + cSHelper.GetMachineIpAddress());
                 this.LogWriter("Open the below link in your browser and if it opens then you can proceed further");
                 this.LogWriter("http://" + cSHelper.GetMachineIpAddress() + ":" + this.serverPortTextBox.Text + "/signalr/hubs");
+                this.LogWriter("You need to open a port in outbound rule of Windows FireWall. PORT IS : " + this.serverPortTextBox.Text);
                 this.connectServerAddressTextBox.Text = cSHelper.GetMachineIpAddress();
                 this.connectServerPortTextBox.Text = this.serverPortTextBox.Text;
                 this.startServerButton.Enabled = false;
@@ -124,21 +129,35 @@ namespace ClipSync {
                 this.startServerButton.Enabled = true;
             }
         }
+
         /// <summary>
         /// Log Writer on Form
         /// </summary>
         /// <param name="t">string text to write</param>
-        public void LogWriter(string t) {
-            // Running on the worker thread
-            loginFormHandle.Invoke((MethodInvoker)delegate {
-                // Running on the UI thread
-                this.consoleTextBox.Text = this.consoleTextBox.Text + "\n" + t;
-                this.consoleTextBox.SelectionStart = this.consoleTextBox.Text.Length;
-                this.consoleTextBox.ScrollToCaret();
-            });
-            // Back on the worker thread
+        internal void LogWriter(string t) {
+
+            if (consoleTextBox.InvokeRequired) {
+                this.Invoke((Action)(() =>
+                    LogWriter(t)
+                ));
+                return;
+            }
+            consoleTextBox.AppendText(Environment.NewLine + t);
+            consoleTextBox.SelectionStart = consoleTextBox.Text.Length;
+            consoleTextBox.ScrollToCaret();
+
+
+            //// Running on the worker thread
+            //Invoke((MethodInvoker)delegate {
+            //    // Running on the UI thread
+            //    this.consoleTextBox.AppendText(Environment.NewLine + t);
+            //    this.consoleTextBox.SelectionStart = this.consoleTextBox.Text.Length;
+            //    this.consoleTextBox.ScrollToCaret();
+            //});
+            //// Back on the worker thread
 
         }
+
         private void AddClipBoardListener() {
             //NativeMethods.SetParent(Handle, NativeMethods.HWND_MESSAGE);
             NativeMethods.AddClipboardFormatListener(Handle);
@@ -183,7 +202,6 @@ namespace ClipSync {
 
     }
 
-
     internal static class NativeMethods {
         // See http://msdn.microsoft.com/en-us/library/ms649021%28v=vs.85%29.aspx
         public const int WM_CLIPBOARDUPDATE = 0x031D;
@@ -199,4 +217,5 @@ namespace ClipSync {
         [DllImport("user32.dll", SetLastError = true)]
         public static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
     }
+
 }
