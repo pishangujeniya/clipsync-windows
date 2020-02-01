@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Management;
-using System.Threading.Tasks;
+﻿using System.Net;
 using System.Net.NetworkInformation;
-using System.Net;
 using System.Net.Sockets;
 
 
-namespace ClipSync {
-    class CSHelper {
-
+namespace ClipSync.Helpers {
+    /// <summary>
+    /// All Global Helper Methods
+    /// </summary>
+    class GlobalHelper {
+        /// <summary>
+        /// Provides the MAC address of current system
+        /// </summary>
+        /// <returns></returns>
         public string GetMacAddress() {
             foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces()) {
                 //// Only consider Ethernet network interfaces
@@ -26,6 +26,10 @@ namespace ClipSync {
             return "UNKNOWN";
         }
 
+        /// <summary>
+        /// Provides the Ip Address of current connected network
+        /// </summary>
+        /// <returns></returns>
         public string GetMachineIpAddress() {
             IPHostEntry host;
             string localIP = "";
@@ -38,7 +42,8 @@ namespace ClipSync {
 
                 if (ip.AddressFamily == AddressFamily.InterNetwork && temp[0] == "192") {
                     break;
-                } else {
+                }
+                else {
                     localIP = null;
                 }
             }
@@ -46,6 +51,12 @@ namespace ClipSync {
             return localIP;
         }
 
+        /// <summary>
+        /// [UNDER DEVELOPMENT] Open the given Port in the Windows Firewall
+        /// </summary>
+        /// <param name="port"></param>
+        /// <param name="rule_name"></param>
+        /// <param name="rule_description"></param>
         public void OpenFireWallPOrt(int port, string rule_name, string rule_description) {
         }
     }

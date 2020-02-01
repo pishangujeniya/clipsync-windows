@@ -23,6 +23,7 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ClipSyncControlForm));
             this.Login_Button = new System.Windows.Forms.Button();
             this.consoleTextBox = new System.Windows.Forms.RichTextBox();
             this.clientGroupBox = new System.Windows.Forms.GroupBox();
@@ -200,7 +201,7 @@
             this.label1.TabIndex = 11;
             this.label1.Text = "UID";
             // 
-            // LoginSignUpForm
+            // ClipSyncControlForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -208,8 +209,9 @@
             this.Controls.Add(this.serverGroupBox);
             this.Controls.Add(this.clientGroupBox);
             this.Controls.Add(this.consoleTextBox);
-            this.Name = "LoginSignUpForm";
-            this.Text = "ClipSync - Controller";
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "ClipSyncControlForm";
+            this.Text = "ClipSync";
             this.Load += new System.EventHandler(this.LoginSignUpForm_Load);
             this.clientGroupBox.ResumeLayout(false);
             this.clientGroupBox.PerformLayout();

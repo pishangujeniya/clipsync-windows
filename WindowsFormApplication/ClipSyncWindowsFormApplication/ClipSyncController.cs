@@ -1,14 +1,10 @@
-﻿using ClipSync.Models;
-using ClipSync.SignalR;
-using Microsoft.AspNet.SignalR;
+﻿using ClipSync.Helpers;
 using Microsoft.AspNet.SignalR.Client;
-using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.Owin.Hosting;
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ClipSync {
@@ -17,11 +13,11 @@ namespace ClipSync {
 
         public string mTime = DateTime.Now.ToLongTimeString();
 
-        private CSHelper cSHelper;
+        private readonly GlobalHelper globalHelper;
 
         public IHubProxy _hub;
 
-        private IDisposable SignalR { get; set; }
+        private IDisposable signalRDisposable { get; set; }
 
         bool isSignalRConnected = false;
 
@@ -29,7 +25,7 @@ namespace ClipSync {
 
         internal ClipSyncControlForm() {
             InitializeComponent();
-            this.cSHelper = new CSHelper();
+            this.globalHelper = new GlobalHelper();
         }
 
         private void LoginSignUpForm_Load(object sender, EventArgs e) {
@@ -37,7 +33,7 @@ namespace ClipSync {
 
                 this.LogWriter("-------------------");
                 this.LogWriter("Enter address and port then start server and wait.");
-                this.LogWriter("Your ip is: " + cSHelper.GetMachineIpAddress());
+                this.LogWriter("Your ip is: " + globalHelper.GetMachineIpAddress());
 
                 this.serverGroupBox.Show();
                 this.serverAddressTextBox.Text = "*";
@@ -46,7 +42,8 @@ namespace ClipSync {
                 this.connectUidTextBox.Text = new Random().Next(1000, 9999).ToString();
 
 
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 this.LogWriter(ex.ToString());
             }
         }
@@ -64,14 +61,15 @@ namespace ClipSync {
             IDictionary<string, string> keyValuePairs = new Dictionary<string, string>();
             keyValuePairs.Add("uid", uid);
             keyValuePairs.Add("platform", "WINDOWS");
-            keyValuePairs.Add("device_id", cSHelper.GetMacAddress());
+            keyValuePairs.Add("device_id", globalHelper.GetMacAddress());
 
             try {
                 var connection = new HubConnection("http://" + serverAddress + ":" + serverPort, keyValuePairs);
-                this._hub = connection.CreateHubProxy(WebApi.hub_name);
+                this._hub = connection.CreateHubProxy(ConfigurationManager.AppSettings["hub_name"]);
                 connection.Start().Wait();
                 isSignalRConnected = true;
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 isSignalRConnected = false;
                 Login_Button.Enabled = true;
                 this.LogWriter("Exception in connecting to SignalR Hub : " + ex.ToString());
@@ -79,21 +77,22 @@ namespace ClipSync {
 
             if (!isSignalRConnected) {
                 MessageBox.Show("ClipSync Server is not running, so Please close the whole app and try again after sometime.", "Warning");
-            } else {
+            }
+            else {
 
                 MessageBox.Show("ClipSync Server is now connected, You need to connect to this uid: " + uid + " from all your devices. Now you can minimise this window", "Success");
                 this.LogWriter("ClipSync Server is now connected, You need to connect to this uid: " + uid + " from all your devices. Now you can minimise this window");
 
                 AddClipBoardListener();
 
-                this._hub.On(WebApi.recieve_copied_text_signalr_method_name, delegate (String data) {
+                this._hub.On(ConfigurationManager.AppSettings["recieve_copied_text_signalr_method_name"], delegate (String data) {
                     //Console.WriteLine("Recieved Text :" + data);
 
                     if (data != null && data.Length > 0) {
-                        if (!data.Contains(WebApi.copied_watermark) && !data.Equals(ClipBoardHelper.GetText(), StringComparison.InvariantCultureIgnoreCase)) {
+                        if (!data.Contains(ConfigurationManager.AppSettings["copied_watermark"]) && !data.Equals(ClipBoardHelper.GetText(), StringComparison.InvariantCultureIgnoreCase)) {
                             this.LogWriter("Your ClipBoard Updated with :");
-                            ClipBoardHelper.SetText(data + WebApi.copied_watermark);
-                            this.LogWriter(data + WebApi.copied_watermark);
+                            ClipBoardHelper.SetText(data + ConfigurationManager.AppSettings["copied_watermark"]);
+                            this.LogWriter(data + ConfigurationManager.AppSettings["copied_watermark"]);
                         }
                     }
 
@@ -109,22 +108,24 @@ namespace ClipSync {
             this.LogWriter(url);
             try {
                 //SignalR = WebApp.Start<Startup>(url);
-                SignalR = WebApp.Start(url);
+                signalRDisposable = WebApp.Start(url);
                 this.LogWriter(string.Format("Server running at {0}", url + "signalr/hubs"));
-                this.LogWriter("Your ip is: " + cSHelper.GetMachineIpAddress());
+                this.LogWriter("Your ip is: " + globalHelper.GetMachineIpAddress());
                 this.LogWriter("Open the below link in your browser and if it opens then you can proceed further");
-                this.LogWriter("http://" + cSHelper.GetMachineIpAddress() + ":" + this.serverPortTextBox.Text + "/signalr/hubs");
+                this.LogWriter("http://" + globalHelper.GetMachineIpAddress() + ":" + this.serverPortTextBox.Text + "/signalr/hubs");
                 this.LogWriter("You need to open a port in outbound rule of Windows FireWall. PORT IS : " + this.serverPortTextBox.Text);
-                this.connectServerAddressTextBox.Text = cSHelper.GetMachineIpAddress();
+                this.connectServerAddressTextBox.Text = globalHelper.GetMachineIpAddress();
                 this.connectServerPortTextBox.Text = this.serverPortTextBox.Text;
                 this.startServerButton.Enabled = false;
-            } catch (System.Reflection.TargetInvocationException ex) {
+            }
+            catch (System.Reflection.TargetInvocationException ex) {
                 this.LogWriter("You need to run as administrator");
                 this.LogWriter("Only server address localhost is allowed without administrator permissions");
                 MessageBox.Show("You need to run as administrator", "Error");
                 Console.WriteLine(ex.ToString());
                 this.startServerButton.Enabled = true;
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 this.LogWriter(ex.ToString());
                 this.startServerButton.Enabled = true;
             }
@@ -146,16 +147,6 @@ namespace ClipSync {
             consoleTextBox.SelectionStart = consoleTextBox.Text.Length;
             consoleTextBox.ScrollToCaret();
 
-
-            //// Running on the worker thread
-            //Invoke((MethodInvoker)delegate {
-            //    // Running on the UI thread
-            //    this.consoleTextBox.AppendText(Environment.NewLine + t);
-            //    this.consoleTextBox.SelectionStart = this.consoleTextBox.Text.Length;
-            //    this.consoleTextBox.ScrollToCaret();
-            //});
-            //// Back on the worker thread
-
         }
 
         private void AddClipBoardListener() {
@@ -171,9 +162,6 @@ namespace ClipSync {
             this.LogWriter("websocket_Closed");
         }
 
-        //private void websocket_Error(object sender, SuperSocket.ClientEngine.ErrorEventArgs e) {
-        //    this.consoleLogWriter("websocket_Error");
-        //}
 
         protected override void WndProc(ref Message m) {
             if (m.Msg == NativeMethods.WM_CLIPBOARDUPDATE) {
@@ -183,15 +171,16 @@ namespace ClipSync {
                 if (m.Msg == NativeMethods.WM_CLIPBOARDUPDATE) {
                     string copied_content = (string)iData.GetData(DataFormats.Text);
                     //do something with it
-                    if (copied_content != null && !copied_content.Contains(WebApi.copied_watermark) && copied_content.Length > 0) {
+                    if (copied_content != null && !copied_content.Contains(ConfigurationManager.AppSettings["copied_watermark"]) && copied_content.Length > 0) {
                         double lastTime = TimeSpan.Parse(mTime).Seconds;
                         mTime = DateTime.Now.ToLongTimeString();
-                        if ((TimeSpan.Parse(mTime).Seconds - lastTime) > WebApi.number_of_seconds_interval_between_copy) {
+                        if ((TimeSpan.Parse(mTime).Seconds - lastTime) > Convert.ToInt32(ConfigurationManager.AppSettings["number_of_seconds_interval_between_copy"])) {
                             this.LogWriter(copied_content);
-                            _hub.Invoke(WebApi.send_copied_text_signalr_method_name, copied_content);
+                            _hub.Invoke(ConfigurationManager.AppSettings["send_copied_text_signalr_method_name"], copied_content);
                         }
                     }
-                } else if (iData.GetDataPresent(DataFormats.Bitmap)) {
+                }
+                else if (iData.GetDataPresent(DataFormats.Bitmap)) {
                     //Bitmap image = (Bitmap)iData.GetData(DataFormats.Bitmap);   // Clipboard image
                     //do something with it
                 }
