@@ -2,7 +2,14 @@
 
 namespace ClipSync.Helpers {
 
+    /// <summary>
+    /// Windows ClipBoard Helper
+    /// </summary>
     public static class ClipBoardHelper {
+        /// <summary>
+        /// Set the text value to Windows ClipBoard
+        /// </summary>
+        /// <param name="p_Text">text to set as last copied content</param>
         public static void SetText(string p_Text) {
             if (p_Text == null) {
                 p_Text = "";
@@ -18,6 +25,11 @@ namespace ClipSync.Helpers {
             STAThread.Start();
             STAThread.Join();
         }
+
+        /// <summary>
+        /// Get the text value to Windows ClipBoard
+        /// </summary>
+        /// <returns>clipboard text content string</returns>
         public static string GetText() {
             string ReturnValue = string.Empty;
             Thread STAThread = new Thread(

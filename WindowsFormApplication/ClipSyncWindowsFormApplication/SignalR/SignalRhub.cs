@@ -1,25 +1,39 @@
 ﻿using ClipSync.Models;
-using ClipSync.SignalR;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using System;
 using System.Collections;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace ClipSync.SignalR {
 
+    /// <summary>
+    /// Signal R Hub Main Class
+    /// </summary>
     [HubName("SignalRHub")]
     public class SignalRHub : Hub {
 
+        /// <summary>
+        /// Equals
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj) {
             return base.Equals(obj);
         }
 
+        /// <summary>
+        /// GetHashCode
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode() {
             return base.GetHashCode();
         }
 
+        /// <summary>
+        /// On Connected Event
+        /// </summary>
+        /// <returns></returns>
         public override Task OnConnected() {
             IRequest request = Context.Request;
             string connectionID = Context.ConnectionId;
@@ -36,6 +50,11 @@ namespace ClipSync.SignalR {
             return base.OnConnected();
         }
 
+        /// <summary>
+        /// On Disconnected Event
+        /// </summary>
+        /// <param name="stopCalled"></param>
+        /// <returns></returns>
         public override Task OnDisconnected(bool stopCalled) {
             Console.WriteLine("OnDisconnected : " + Context.ConnectionId);
             string searched_uid = Users.GetUIDFromConnectionID(Context.ConnectionId);
@@ -47,18 +66,26 @@ namespace ClipSync.SignalR {
             return base.OnDisconnected(stopCalled);
         }
 
+        /// <summary>
+        /// On Reconnected Event
+        /// </summary>
+        /// <returns></returns>
         public override Task OnReconnected() {
             return base.OnReconnected();
         }
 
-        public override string ToString() {
-            return base.ToString();
-        }
-
+        /// <summary>
+        /// Dispose
+        /// </summary>
+        /// <param name="disposing"></param>
         protected override void Dispose(bool disposing) {
             base.Dispose(disposing);
         }
 
+        /// <summary>
+        /// Check Length
+        /// </summary>
+        /// <param name="message"></param>
         public void DetermineLength(string message) {
 
             Console.WriteLine(message);
@@ -66,6 +93,10 @@ namespace ClipSync.SignalR {
             Clients.All.ReceiveLength(newMessage);
         }
 
+        /// <summary>
+        /// Send Copied Text to Every Client of the user
+        /// </summary>
+        /// <param name="text"></param>
         public void SendCopiedText(string text) {
 
             string connection_id = Context.ConnectionId;

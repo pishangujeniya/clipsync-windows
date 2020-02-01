@@ -5,11 +5,18 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace ClipSync.SignalR {
+    /// <summary>
+    /// Users
+    /// </summary>
     static class Users {
 
         private static Dictionary<string, ArrayList> users_dictionary = new Dictionary<string, ArrayList>();
 
-
+        /// <summary>
+        /// Adds the new user
+        /// </summary>
+        /// <param name="uid"></param>
+        /// <param name="userConnection"></param>
         public static void AddUserConnection(string uid, UserConnection userConnection) {
 
             if (users_dictionary.ContainsKey(uid)) {
@@ -32,6 +39,11 @@ namespace ClipSync.SignalR {
             Console.WriteLine("Total Number of Connections now are : " + connections.Count);
         }
 
+        /// <summary>
+        /// Returns all the User Connections
+        /// </summary>
+        /// <param name="uid"></param>
+        /// <returns></returns>
         public static ArrayList GetUserConnections(string uid) {
             if (users_dictionary.ContainsKey(uid)) {
                 return users_dictionary[uid];
@@ -40,6 +52,11 @@ namespace ClipSync.SignalR {
             }
         }
 
+        /// <summary>
+        /// Deletes a User Connection
+        /// </summary>
+        /// <param name="uid"></param>
+        /// <param name="connection_id"></param>
         public static void DeleteUserConnection(string uid, string connection_id) {
             if (users_dictionary.ContainsKey(uid)) {
 
@@ -68,6 +85,11 @@ namespace ClipSync.SignalR {
             }
         }
 
+        /// <summary>
+        /// Returns Uid From Signal R Connection Id
+        /// </summary>
+        /// <param name="connection_id"></param>
+        /// <returns></returns>
         public static string GetUIDFromConnectionID(string connection_id) {
             string[] uids = users_dictionary.Keys.ToArray();
 

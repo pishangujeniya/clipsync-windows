@@ -9,26 +9,47 @@ using System.Windows.Forms;
 
 namespace ClipSync {
 
+    /// <summary>
+    /// Mail Home Form of ClipSync
+    /// </summary>
     public partial class ClipSyncControlForm : Form {
 
+        /// <summary>
+        /// time interval for checking copying data
+        /// </summary>
         public string mTime = DateTime.Now.ToLongTimeString();
 
+        /// <summary>
+        /// Global Helper Instance
+        /// </summary>
         private readonly GlobalHelper globalHelper;
 
+        /// <summary>
+        /// Signal R Hub Proxy
+        /// </summary>
         public IHubProxy _hub;
 
+        /// <summary>
+        /// signal R Disposable Hub object
+        /// </summary>
         private IDisposable signalRDisposable { get; set; }
 
         bool isSignalRConnected = false;
 
+        /// <summary>
+        /// User Id
+        /// </summary>
         public string uid = "";
 
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
         internal ClipSyncControlForm() {
             InitializeComponent();
             this.globalHelper = new GlobalHelper();
         }
 
-        private void LoginSignUpForm_Load(object sender, EventArgs e) {
+        private void ClipSyncControlForm_Load(object sender, EventArgs e) {
             try {
 
                 this.LogWriter("-------------------");
@@ -42,13 +63,48 @@ namespace ClipSync {
                 this.connectUidTextBox.Text = new Random().Next(1000, 9999).ToString();
 
 
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 this.LogWriter(ex.ToString());
             }
         }
 
-        private void LoginButtonClick(object sender, EventArgs e) {
+        /// <summary>
+        /// Server Port text box key press event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void serverPortTextBox_KeyPress(object sender, KeyPressEventArgs e) {
+            if (!(Char.IsDigit(e.KeyChar) || (e.KeyChar == (char)Keys.Back)))
+                e.Handled = true;
+        }
+
+        /// <summary>
+        /// Connect To Server Port Key Press Event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void connectServerPortTextBox_KeyPress(object sender, KeyPressEventArgs e) {
+            if (!(Char.IsDigit(e.KeyChar) || (e.KeyChar == (char)Keys.Back)))
+                e.Handled = true;
+        }
+
+        /// <summary>
+        /// Connect Uid Key Press Event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void connectUidTextBox_KeyPress(object sender, KeyPressEventArgs e) {
+
+            if (!(Char.IsDigit(e.KeyChar) || (e.KeyChar == (char)Keys.Back)))
+                e.Handled = true;
+        }
+
+        /// <summary>
+        /// Login Button Click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void LoginButton_Click(object sender, EventArgs e) {
 
             Login_Button.Enabled = false;
 
@@ -68,8 +124,7 @@ namespace ClipSync {
                 this._hub = connection.CreateHubProxy(ConfigurationManager.AppSettings["hub_name"]);
                 connection.Start().Wait();
                 isSignalRConnected = true;
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 isSignalRConnected = false;
                 Login_Button.Enabled = true;
                 this.LogWriter("Exception in connecting to SignalR Hub : " + ex.ToString());
@@ -77,8 +132,7 @@ namespace ClipSync {
 
             if (!isSignalRConnected) {
                 MessageBox.Show("ClipSync Server is not running, so Please close the whole app and try again after sometime.", "Warning");
-            }
-            else {
+            } else {
 
                 MessageBox.Show("ClipSync Server is now connected, You need to connect to this uid: " + uid + " from all your devices. Now you can minimise this window", "Success");
                 this.LogWriter("ClipSync Server is now connected, You need to connect to this uid: " + uid + " from all your devices. Now you can minimise this window");
@@ -101,6 +155,11 @@ namespace ClipSync {
 
         }
 
+        /// <summary>
+        /// Start Server Button Click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void StartServerButton_Click(object sender, EventArgs e) {
             this.startServerButton.Enabled = false;
             this.LogWriter("Starting server on ");
@@ -117,17 +176,52 @@ namespace ClipSync {
                 this.connectServerAddressTextBox.Text = globalHelper.GetMachineIpAddress();
                 this.connectServerPortTextBox.Text = this.serverPortTextBox.Text;
                 this.startServerButton.Enabled = false;
-            }
-            catch (System.Reflection.TargetInvocationException ex) {
+
+                this.OpenPortButton.PerformClick();
+            } catch (System.Reflection.TargetInvocationException ex) {
                 this.LogWriter("You need to run as administrator");
                 this.LogWriter("Only server address localhost is allowed without administrator permissions");
                 MessageBox.Show("You need to run as administrator", "Error");
                 Console.WriteLine(ex.ToString());
                 this.startServerButton.Enabled = true;
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 this.LogWriter(ex.ToString());
                 this.startServerButton.Enabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Open Port Button Click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OpenPortButton_Click(object sender, EventArgs e) {
+            try {
+
+                this.OpenPortButton.Enabled = false;
+                int serverPort = Convert.ToInt32(this.serverPortTextBox.Text);
+
+                this.LogWriter("Checking the status of inbound port: " + serverPort + " Please wait...");
+                if (this.globalHelper.IsPortOpened(serverPort, "ClipSync")) {
+                    this.LogWriter("Port " + serverPort + " is already open");
+                } else {
+                    this.LogWriter("Opening the inbound port: " + serverPort + " Please wait...");
+                    if (this.globalHelper.OpenInboundFirewallPort(serverPort, "ClipSync", serverPort.ToString())) {
+                        this.LogWriter("Successfully opened the inbound port : " + serverPort);
+                    } else {
+                        this.LogWriter("Failed to open the inbound port : " + serverPort);
+                        this.LogWriter("Try running as administrator");
+                        MessageBox.Show("Try running as administrator", "Error");
+                    }
+                }
+                this.OpenPortButton.Enabled = true;
+            } catch (System.Reflection.TargetInvocationException ex) {
+                this.LogWriter("You need to run as administrator");
+                MessageBox.Show("You need to run as administrator", "Error");
+                Console.WriteLine(ex.ToString());
+            } catch (Exception ex) {
+                this.OpenPortButton.Enabled = true;
+                this.LogWriter(ex.ToString());
             }
         }
 
@@ -143,26 +237,24 @@ namespace ClipSync {
                 ));
                 return;
             }
-            consoleTextBox.AppendText(Environment.NewLine + t);
+            consoleTextBox.AppendText(Environment.NewLine + Environment.NewLine + t);
             consoleTextBox.SelectionStart = consoleTextBox.Text.Length;
             consoleTextBox.ScrollToCaret();
 
         }
 
+        /// <summary>
+        /// Adds ClipBoard Listener to the Window
+        /// </summary>
         private void AddClipBoardListener() {
             //NativeMethods.SetParent(Handle, NativeMethods.HWND_MESSAGE);
             NativeMethods.AddClipboardFormatListener(Handle);
         }
 
-        private void websocket_MessageReceived(object sender, EventArgs e) {
-            this.LogWriter("websocket_MessageReceived");
-        }
-
-        private void websocket_Closed(object sender, EventArgs e) {
-            this.LogWriter("websocket_Closed");
-        }
-
-
+        /// <summary>
+        ///  WindProc for getting ClipBoard Data
+        /// </summary>
+        /// <param name="m"></param>
         protected override void WndProc(ref Message m) {
             if (m.Msg == NativeMethods.WM_CLIPBOARDUPDATE) {
 
@@ -179,8 +271,7 @@ namespace ClipSync {
                             _hub.Invoke(ConfigurationManager.AppSettings["send_copied_text_signalr_method_name"], copied_content);
                         }
                     }
-                }
-                else if (iData.GetDataPresent(DataFormats.Bitmap)) {
+                } else if (iData.GetDataPresent(DataFormats.Bitmap)) {
                     //Bitmap image = (Bitmap)iData.GetData(DataFormats.Bitmap);   // Clipboard image
                     //do something with it
                 }
@@ -188,6 +279,7 @@ namespace ClipSync {
 
             base.WndProc(ref m);
         }
+
 
     }
 

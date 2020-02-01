@@ -35,6 +35,7 @@
             this.connectServerAddressLabel = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.serverGroupBox = new System.Windows.Forms.GroupBox();
+            this.OpenPortButton = new System.Windows.Forms.Button();
             this.serverAddressTextBox = new System.Windows.Forms.TextBox();
             this.startServerButton = new System.Windows.Forms.Button();
             this.serverPortTextBox = new System.Windows.Forms.TextBox();
@@ -53,7 +54,7 @@
             this.Login_Button.TabIndex = 3;
             this.Login_Button.Text = "Login";
             this.Login_Button.UseVisualStyleBackColor = true;
-            this.Login_Button.Click += new System.EventHandler(this.LoginButtonClick);
+            this.Login_Button.Click += new System.EventHandler(this.LoginButton_Click);
             // 
             // consoleTextBox
             // 
@@ -86,6 +87,7 @@
             this.connectServerPortTextBox.Name = "connectServerPortTextBox";
             this.connectServerPortTextBox.Size = new System.Drawing.Size(76, 20);
             this.connectServerPortTextBox.TabIndex = 10;
+            this.connectServerPortTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.connectServerPortTextBox_KeyPress);
             // 
             // connectUidTextBox
             // 
@@ -93,6 +95,7 @@
             this.connectUidTextBox.Name = "connectUidTextBox";
             this.connectUidTextBox.Size = new System.Drawing.Size(107, 20);
             this.connectUidTextBox.TabIndex = 6;
+            this.connectUidTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.connectUidTextBox_KeyPress);
             // 
             // uidLabel
             // 
@@ -137,6 +140,7 @@
             // 
             // serverGroupBox
             // 
+            this.serverGroupBox.Controls.Add(this.OpenPortButton);
             this.serverGroupBox.Controls.Add(this.serverAddressTextBox);
             this.serverGroupBox.Controls.Add(this.startServerButton);
             this.serverGroupBox.Controls.Add(this.serverPortTextBox);
@@ -149,6 +153,16 @@
             this.serverGroupBox.TabStop = false;
             this.serverGroupBox.Text = "Server";
             // 
+            // OpenPortButton
+            // 
+            this.OpenPortButton.Location = new System.Drawing.Point(168, 114);
+            this.OpenPortButton.Name = "OpenPortButton";
+            this.OpenPortButton.Size = new System.Drawing.Size(75, 23);
+            this.OpenPortButton.TabIndex = 4;
+            this.OpenPortButton.Text = "Open Port";
+            this.OpenPortButton.UseVisualStyleBackColor = true;
+            this.OpenPortButton.Click += new System.EventHandler(this.OpenPortButton_Click);
+            // 
             // serverAddressTextBox
             // 
             this.serverAddressTextBox.Location = new System.Drawing.Point(48, 32);
@@ -158,7 +172,7 @@
             // 
             // startServerButton
             // 
-            this.startServerButton.Location = new System.Drawing.Point(107, 115);
+            this.startServerButton.Location = new System.Drawing.Point(49, 114);
             this.startServerButton.Name = "startServerButton";
             this.startServerButton.Size = new System.Drawing.Size(75, 23);
             this.startServerButton.TabIndex = 3;
@@ -173,6 +187,7 @@
             this.serverPortTextBox.Size = new System.Drawing.Size(196, 20);
             this.serverPortTextBox.TabIndex = 2;
             this.serverPortTextBox.Text = "6262";
+            this.serverPortTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.serverPortTextBox_KeyPress);
             // 
             // serverPort
             // 
@@ -212,7 +227,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ClipSyncControlForm";
             this.Text = "ClipSync";
-            this.Load += new System.EventHandler(this.LoginSignUpForm_Load);
+            this.Load += new System.EventHandler(this.ClipSyncControlForm_Load);
             this.clientGroupBox.ResumeLayout(false);
             this.clientGroupBox.PerformLayout();
             this.serverGroupBox.ResumeLayout(false);
@@ -240,5 +255,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox connectServerPortTextBox;
         private System.Windows.Forms.RichTextBox consoleTextBox;
+        private System.Windows.Forms.Button OpenPortButton;
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Management.Automation;
+using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
@@ -42,8 +43,7 @@ namespace ClipSync.Helpers {
 
                 if (ip.AddressFamily == AddressFamily.InterNetwork && temp[0] == "192") {
                     break;
-                }
-                else {
+                } else {
                     localIP = null;
                 }
             }
@@ -52,12 +52,46 @@ namespace ClipSync.Helpers {
         }
 
         /// <summary>
-        /// [UNDER DEVELOPMENT] Open the given Port in the Windows Firewall
+        /// Opens the given Port in the inbound Windows Firewall
+        /// </summary>
+        /// <param name="port">port number</param>
+        /// <param name="ruleDisplayName">Rule Display Name</param>
+        /// <param name="ruleDescription">Rule Description</param>
+        /// <returns></returns>
+        public bool OpenInboundFirewallPort(int port, string ruleDisplayName, string ruleDescription) {
+            try {
+                var powershell = PowerShell.Create();
+                var psCommand = $"New-NetFirewallRule -DisplayName \"" + ruleDisplayName + "\" -Description " + ruleDescription + " -Direction Inbound -LocalPort " + port + " -Protocol TCP -Action Allow";
+                powershell.Commands.AddScript(psCommand);
+                var x = powershell.Invoke();
+                if (x.Count > 0) {
+                    return true;
+                } else {
+                    return false;
+
+                }
+            } catch (System.Exception ex) {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Checks where the port is opened or not
         /// </summary>
         /// <param name="port"></param>
-        /// <param name="rule_name"></param>
-        /// <param name="rule_description"></param>
-        public void OpenFireWallPOrt(int port, string rule_name, string rule_description) {
+        /// <param name="displayName"></param>
+        /// <returns></returns>
+        public bool IsPortOpened(int port, string displayName) {
+            var powershell = PowerShell.Create();
+            var psCommand = $"Get-NetFirewallRule -DisplayName \"" + displayName + "\"";
+            powershell.Commands.AddScript(psCommand);
+            var x = powershell.Invoke();
+            foreach (var rule in x) {
+                if (rule.Properties["Description"].Value.ToString() == port.ToString()) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
