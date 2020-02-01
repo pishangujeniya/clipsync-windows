@@ -1,5 +1,7 @@
 # ClipSync
 
+![Happy Christmas](/images/clip_sync_logo_2.png)
+
 A Common Clipboard tool between Windows and Android.
 ```
 do Ctrl+C in windows
