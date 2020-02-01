@@ -1,6 +1,6 @@
 # ClipSync
 
-![Happy Christmas](/images/clip_sync_logo_2.png)
+<a href="https://github.com/pishangujeniya/clipsync-windows/"><img src="/images/clip_sync_logo_2.png" title="ClipSync" alt="ClipSync"></a>
 
 A Common Clipboard tool between Windows and Android.
 ```
@@ -9,22 +9,49 @@ do Ctrl+C in windows
 Paste in Android
 ```
 
-## Getting Started with ClipSync Windows Software Development
+## How to use?
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-### Prerequisites
+## Contributing
 
-What things you need to install the software and how to install them
+> To get started...
 
-* [Visual Studio](https://visualstudio.microsoft.com/downloads/) 2017
-* [Visual Studio Code](https://code.visualstudio.com/) (Recommended)
+### Step 1
+    - 🍴 Fork this repo!
+### Step 2
+    - 👯 Clone this repo to your local machine using `https://github.com/pishangujeniya/clipsync-windows.git`
+### Step 3
+    - **HACK AWAY!** 🔨🔨🔨
+### Step 4
+    - 🔃 Create a new pull request 
 
-### ClipSync Repositories
+## ClipSync Repositories
 
-* [clipsync-server](https://github.com/pishangujeniya/clipsync-server)
 * [clipsync-windows](https://github.com/pishangujeniya/clipsync-windows)
 * [clipsync-android](https://github.com/pishangujeniya/clipsync-android)
+
+## Support
+
+Reach out to me at one of the following places!
+
+- Website at <a href="http://pishangujeniya.com" target="_blank">`pishangujeniya.com`</a>
+- LinkedIn at <a href="https://www.linkedin.com/in/pishangujeniya/" target="_blank">`pishangujeniya`</a>
+
+---
+
+## Donations
+
+<a href="http://pishangujeniya.com"><img src="https://www.worldfuturecouncil.org/wp-content/uploads/2018/09/Donate-Button-HEART.png" title="Donate ClipSync Developer" alt="Donate ClipSync Developer" width="170px" height="60px"></a>
+> Donate me on _+91 88 66 33 01 05_ via <a href="http://paytm.com" target="_blank">**PayTm**</a>
+
+---
+
+## License
+
+[![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](https://github.com/pishangujeniya/clipsync-windows/blob/master/LICENSE)
+
+- **[MIT license](http://opensource.org/licenses/mit-license.php)**
+- Copyright 2018 - 2020 © <a href="http://pishangujeniya.com" target="_blank">Pishang Ujeniya</a>.
 
 ## Acknowledgments
 
