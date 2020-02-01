@@ -65,8 +65,7 @@ Reach out to me at one of the following places!
 
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](https://github.com/pishangujeniya/clipsync-windows/blob/master/LICENSE)
 
-- **[MIT license](http://opensource.org/licenses/mit-license.php)**
-- Copyright 2018 - 2020 © <a href="http://pishangujeniya.com" target="_blank">Pishang Ujeniya</a>.
+> Copyright 2018 - 2020 © <a href="http://pishangujeniya.com" target="_blank">Pishang Ujeniya</a>.
 
 ## Acknowledgments
 
