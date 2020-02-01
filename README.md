@@ -9,21 +9,36 @@ do Ctrl+C in windows
 Paste in Android
 ```
 
+## Download
+
+<a href="https://github.com/pishangujeniya/clipsync-windows/releases"><img src="/images/get_it_from_MS.png" title="ClipSync Windows" alt="ClipSync Windows" width="170px" height="60px"></a><a href="https://github.com/pishangujeniya/clipsync-android/releases"><img src="/images/get_it_on_google_play.png" title="ClipSync Android App" alt="ClipSync Android App" width="170px" height="60px"></a>
+
 ## How to use?
 
+### Overview
+
+- ClipSync works within _local network_.
+- It needs a single instance running on any Windows machine as ClipSync Server :computer:
+- Multiple :iphone: **Android** & :computer: **Windows** ClipSync instances can connect to the single server.
+- The devices connecting to the ClipSync server can use any random UID to login.
+- Those devices having same UID will get thier clipboard synced in realtime.
+
+### Creating a ClipSync Server
+
+<img src="/images/ClipSync-Server-Creation.gif" title="ClipSync Server Creation" alt="ClipSync Server Creation">
 
 ## Contributing
 
 > To get started...
 
-### Step 1
-    - 🍴 Fork this repo!
-### Step 2
-    - 👯 Clone this repo to your local machine using `https://github.com/pishangujeniya/clipsync-windows.git`
-### Step 3
-    - **HACK AWAY!** 🔨🔨🔨
-### Step 4
-    - 🔃 Create a new pull request 
+1. 🍴 Fork this repo!
+    
+2. 👯 Clone this repo to your local machine using `https://github.com/pishangujeniya/clipsync-windows.git`
+    
+3. **HACK AWAY!** 🔨🔨🔨
+    
+4. 🔃 Create a new pull request 
+    
 
 ## ClipSync Repositories
 
