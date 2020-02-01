@@ -28,7 +28,7 @@
     <TargetCulture>en-IN</TargetCulture>
     <ProductName>ClipSync</ProductName>
     <PublisherName>Pishang Ujeniya</PublisherName>
-    <ApplicationRevision>4</ApplicationRevision>
+    <ApplicationRevision>5</ApplicationRevision>
     <ApplicationVersion>3.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>true</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
