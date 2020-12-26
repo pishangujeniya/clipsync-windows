@@ -1,4 +1,5 @@
 ﻿using ClipSync.Models;
+using NLog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,6 +10,15 @@ namespace ClipSync.SignalR {
     /// Users
     /// </summary>
     static class Users {
+
+        /// <summary>
+        /// General Logger Target
+        /// </summary>
+        public static Logger generaLogger = LogManager.GetLogger("GeneralLog");
+        /// <summary>
+        /// Copy History Logger Target
+        /// </summary>
+        public static Logger copyHistoryLogger = LogManager.GetLogger("CopyHistory");
 
         private static Dictionary<string, ArrayList> users_dictionary = new Dictionary<string, ArrayList>();
 
@@ -24,7 +34,7 @@ namespace ClipSync.SignalR {
                 ArrayList current_list = users_dictionary[uid];
                 current_list.Add(userConnection);
                 users_dictionary[uid] = current_list;
-                Console.WriteLine("Updated user uid " + uid + " connection list");
+                generaLogger.Info("Updated user uid " + uid + " connection list");
                 //Currently every new connection even from the same device id is added in future if the device id is same but differen connectionID then need to handle that case
             } else {
                 // If the new connection is first connection of the user
@@ -32,11 +42,11 @@ namespace ClipSync.SignalR {
                 ArrayList current_list = users_dictionary[uid];
                 current_list.Add(userConnection);
                 users_dictionary[uid] = current_list;
-                Console.WriteLine("New user uid " + uid + " connection list created");
+                generaLogger.Info("New user uid " + uid + " connection list created");
             }
 
             ArrayList connections = users_dictionary[uid];
-            Console.WriteLine("Total Number of Connections now are : " + connections.Count);
+            generaLogger.Info("Total Number of Connections now are : " + connections.Count);
         }
 
         /// <summary>
@@ -77,7 +87,7 @@ namespace ClipSync.SignalR {
                 // Now deleting at the given index
                 if (index_to_delete != -1) {
                     UserConnection userConnection = (UserConnection)current_list[index_to_delete];
-                    Console.WriteLine("Deleted Successfully a connection of user : " + uid + " connection id : " + userConnection.connection_id + " Platform : " + userConnection.platform + " Device Id : " + userConnection.device_id);
+                    generaLogger.Info("Deleted Successfully a connection of user : " + uid + " connection id : " + userConnection.connection_id + " Platform : " + userConnection.platform + " Device Id : " + userConnection.device_id);
                     current_list.RemoveAt(index_to_delete);
                     users_dictionary[uid] = current_list;
                 }

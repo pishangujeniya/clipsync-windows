@@ -2,13 +2,22 @@
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-
+using NLog;
 
 namespace ClipSync.Helpers {
     /// <summary>
     /// All Global Helper Methods
     /// </summary>
     class GlobalHelper {
+        /// <summary>
+        /// General Logger Target
+        /// </summary>
+        public static Logger generaLogger = LogManager.GetLogger("GeneralLog");
+        /// <summary>
+        /// Copy History Logger Target
+        /// </summary>
+        public static Logger copyHistoryLogger = LogManager.GetLogger("CopyHistory");
+
         /// <summary>
         /// Provides the MAC address of current system
         /// </summary>
@@ -34,20 +43,23 @@ namespace ClipSync.Helpers {
         public string GetMachineIpAddress() {
             IPHostEntry host;
             string localIP = "";
-            host = Dns.GetHostEntry(Dns.GetHostName());
+            try {
+                host = Dns.GetHostEntry(Dns.GetHostName());
 
-            foreach (IPAddress ip in host.AddressList) {
-                localIP = ip.ToString();
+                foreach (IPAddress ip in host.AddressList) {
+                    localIP = ip.ToString();
 
-                string[] temp = localIP.Split('.');
+                    string[] temp = localIP.Split('.');
 
-                if (ip.AddressFamily == AddressFamily.InterNetwork && temp[0] == "192") {
-                    break;
-                } else {
-                    localIP = null;
+                    if (ip.AddressFamily == AddressFamily.InterNetwork && temp[0] == "192") {
+                        break;
+                    } else {
+                        localIP = null;
+                    }
                 }
+            } catch (System.Exception ex) {
+                generaLogger.Error(ex);
             }
-
             return localIP;
         }
 
@@ -68,10 +80,10 @@ namespace ClipSync.Helpers {
                     return true;
                 } else {
                     return false;
-
                 }
             } catch (System.Exception ex) {
-                throw ex;
+                generaLogger.Error(ex);
+                return false;
             }
         }
 
@@ -82,16 +94,21 @@ namespace ClipSync.Helpers {
         /// <param name="displayName"></param>
         /// <returns></returns>
         public bool IsPortOpened(int port, string displayName) {
-            var powershell = PowerShell.Create();
-            var psCommand = $"Get-NetFirewallRule -DisplayName \"" + displayName + "\"";
-            powershell.Commands.AddScript(psCommand);
-            var x = powershell.Invoke();
-            foreach (var rule in x) {
-                if (rule.Properties["Description"].Value.ToString() == port.ToString()) {
-                    return true;
+            try {
+                var powershell = PowerShell.Create();
+                var psCommand = $"Get-NetFirewallRule -DisplayName \"" + displayName + "\"";
+                powershell.Commands.AddScript(psCommand);
+                var x = powershell.Invoke();
+                foreach (var rule in x) {
+                    if (rule.Properties["Description"].Value.ToString() == port.ToString()) {
+                        return true;
+                    }
                 }
+                return false;
+            } catch (System.Exception ex) {
+                generaLogger.Error(ex);
+                return false;
             }
-            return false;
         }
     }
 }

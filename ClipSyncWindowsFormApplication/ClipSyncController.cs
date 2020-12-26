@@ -1,9 +1,11 @@
 ﻿using ClipSync.Helpers;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.Owin.Hosting;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -42,6 +44,15 @@ namespace ClipSync {
         public string uid = "";
 
         /// <summary>
+        /// General Logger Target
+        /// </summary>
+        public Logger generaLogger = LogManager.GetLogger("GeneralLog");
+        /// <summary>
+        /// Copy History Logger Target
+        /// </summary>
+        public Logger copyHistoryLogger = LogManager.GetLogger("CopyHistory");
+
+        /// <summary>
         /// Default Constructor
         /// </summary>
         internal ClipSyncControlForm() {
@@ -65,6 +76,7 @@ namespace ClipSync {
 
             } catch (Exception ex) {
                 this.LogWriter(ex.ToString());
+                this.generaLogger.Error(ex);
             }
         }
 
@@ -128,6 +140,7 @@ namespace ClipSync {
                 isSignalRConnected = false;
                 Login_Button.Enabled = true;
                 this.LogWriter("Exception in connecting to SignalR Hub : " + ex.ToString());
+                this.generaLogger.Error(ex);
             }
 
             if (!isSignalRConnected) {
@@ -182,10 +195,11 @@ namespace ClipSync {
                 this.LogWriter("You need to run as administrator");
                 this.LogWriter("Only server address localhost is allowed without administrator permissions");
                 MessageBox.Show("You need to run as administrator", "Error");
-                Console.WriteLine(ex.ToString());
+                this.generaLogger.Error(ex);
                 this.startServerButton.Enabled = true;
             } catch (Exception ex) {
                 this.LogWriter(ex.ToString());
+                this.generaLogger.Error(ex);
                 this.startServerButton.Enabled = true;
             }
         }
@@ -218,10 +232,11 @@ namespace ClipSync {
             } catch (System.Reflection.TargetInvocationException ex) {
                 this.LogWriter("You need to run as administrator");
                 MessageBox.Show("You need to run as administrator", "Error");
-                Console.WriteLine(ex.ToString());
+                this.generaLogger.Error(ex);
             } catch (Exception ex) {
                 this.OpenPortButton.Enabled = true;
                 this.LogWriter(ex.ToString());
+                this.generaLogger.Error(ex);
             }
         }
 
@@ -237,6 +252,9 @@ namespace ClipSync {
                 ));
                 return;
             }
+
+            this.generaLogger.Info(t);
+
             consoleTextBox.AppendText(Environment.NewLine + Environment.NewLine + t);
             consoleTextBox.SelectionStart = consoleTextBox.Text.Length;
             consoleTextBox.ScrollToCaret();
@@ -256,28 +274,34 @@ namespace ClipSync {
         /// </summary>
         /// <param name="m"></param>
         protected override void WndProc(ref Message m) {
-            if (m.Msg == NativeMethods.WM_CLIPBOARDUPDATE) {
-
-                IDataObject iData = Clipboard.GetDataObject();      // Clipboard's data
+            try {
 
                 if (m.Msg == NativeMethods.WM_CLIPBOARDUPDATE) {
-                    string copied_content = (string)iData.GetData(DataFormats.Text);
-                    //do something with it
-                    if (copied_content != null && !copied_content.Contains(ConfigurationManager.AppSettings["copied_watermark"]) && copied_content.Length > 0) {
-                        double lastTime = TimeSpan.Parse(mTime).Seconds;
-                        mTime = DateTime.Now.ToLongTimeString();
-                        if ((TimeSpan.Parse(mTime).Seconds - lastTime) > Convert.ToInt32(ConfigurationManager.AppSettings["number_of_seconds_interval_between_copy"])) {
-                            this.LogWriter(copied_content);
-                            _hub.Invoke(ConfigurationManager.AppSettings["send_copied_text_signalr_method_name"], copied_content);
-                        }
-                    }
-                } else if (iData.GetDataPresent(DataFormats.Bitmap)) {
-                    //Bitmap image = (Bitmap)iData.GetData(DataFormats.Bitmap);   // Clipboard image
-                    //do something with it
-                }
-            }
 
-            base.WndProc(ref m);
+                    IDataObject iData = Clipboard.GetDataObject();      // Clipboard's data
+
+                    if (m.Msg == NativeMethods.WM_CLIPBOARDUPDATE) {
+                        string copied_content = (string)iData.GetData(DataFormats.Text);
+                        //do something with it
+                        if (copied_content != null && !copied_content.Contains(ConfigurationManager.AppSettings["copied_watermark"]) && copied_content.Length > 0) {
+                            double lastTime = TimeSpan.Parse(mTime).Seconds;
+                            mTime = DateTime.Now.ToLongTimeString();
+                            if ((TimeSpan.Parse(mTime).Seconds - lastTime) > Convert.ToInt32(ConfigurationManager.AppSettings["number_of_seconds_interval_between_copy"])) {
+                                this.LogWriter(copied_content);
+                                _hub.Invoke(ConfigurationManager.AppSettings["send_copied_text_signalr_method_name"], copied_content);
+                            }
+                        }
+                    } else if (iData.GetDataPresent(DataFormats.Bitmap)) {
+                        //Bitmap image = (Bitmap)iData.GetData(DataFormats.Bitmap);   // Clipboard image
+                        //do something with it
+                    }
+                }
+
+                base.WndProc(ref m);
+            } catch (Exception ex) {
+                Debug.WriteLine(ex);
+                this.generaLogger.Error(ex);
+            }
         }
 
 

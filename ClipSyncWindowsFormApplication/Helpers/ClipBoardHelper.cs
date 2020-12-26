@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using NLog;
 
 namespace ClipSync.Helpers {
 
@@ -6,6 +7,13 @@ namespace ClipSync.Helpers {
     /// Windows ClipBoard Helper
     /// </summary>
     public static class ClipBoardHelper {
+
+        /// <summary>
+        /// Copy History Logger Target
+        /// </summary>
+        public static Logger copyHistoryLogger = LogManager.GetLogger("CopyHistory");
+
+
         /// <summary>
         /// Set the text value to Windows ClipBoard
         /// </summary>
@@ -15,12 +23,14 @@ namespace ClipSync.Helpers {
                 p_Text = "";
             }
 
+            copyHistoryLogger.Info(p_Text);
+
             Thread STAThread = new Thread(
-                delegate () {
-                    // Use a fully qualified name for Clipboard otherwise it
-                    // will end up calling itself.
-                    System.Windows.Forms.Clipboard.SetText(p_Text);
-                });
+                    delegate () {
+                        // Use a fully qualified name for Clipboard otherwise it
+                        // will end up calling itself.
+                        System.Windows.Forms.Clipboard.SetText(p_Text);
+                    });
             STAThread.SetApartmentState(ApartmentState.STA);
             STAThread.Start();
             STAThread.Join();
@@ -41,6 +51,8 @@ namespace ClipSync.Helpers {
             STAThread.SetApartmentState(ApartmentState.STA);
             STAThread.Start();
             STAThread.Join();
+
+            copyHistoryLogger.Info(ReturnValue);
 
             return ReturnValue;
         }

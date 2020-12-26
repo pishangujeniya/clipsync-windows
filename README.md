@@ -6,7 +6,7 @@ A Common Clipboard tool between Windows and Android.
 ```
 do Ctrl+C in windows
 
-Paste in Android
+Paste in Android/Windows
 ```
 
 ## Download
@@ -35,7 +35,7 @@ Paste in Android
     
 2. 👯 Clone this repo to your local machine using `https://github.com/pishangujeniya/clipsync-windows.git`
     
-3. **HACK AWAY!** 🔨🔨🔨
+3. 🔨 Hack Away!
     
 4. 🔃 Create a new pull request 
     
@@ -57,7 +57,10 @@ Reach out to me at one of the following places!
 ## Donations
 
 <a href="http://pishangujeniya.com"><img src="https://www.worldfuturecouncil.org/wp-content/uploads/2018/09/Donate-Button-HEART.png" title="Donate ClipSync Developer" alt="Donate ClipSync Developer" width="170px" height="60px"></a>
-> Donate me on _+91 88 66 33 01 05_ via <a href="http://paytm.com" target="_blank">**PayTm**</a>
+
+- Donate me on _+91 88 66 33 01 05_ via <a href="http://paytm.com" target="_blank">**PayTm**</a>
+
+- [PayPal](https://paypal.me/Pishang)
 
 ---
 
@@ -65,7 +68,7 @@ Reach out to me at one of the following places!
 
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](https://github.com/pishangujeniya/clipsync-windows/blob/master/LICENSE)
 
-> Copyright 2018 - 2020 © <a href="http://pishangujeniya.com" target="_blank">Pishang Ujeniya</a>.
+> Copyright 2018 - 2021 © <a href="http://pishangujeniya.com" target="_blank">Pishang Ujeniya</a>.
 
 ## Acknowledgments
 
