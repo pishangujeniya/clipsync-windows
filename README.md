@@ -27,6 +27,8 @@ Paste in Android/Windows
 
 <img src="/images/ClipSync-Server-Creation.gif" title="ClipSync Server Creation" alt="ClipSync Server Creation">
 
+> Delete `Logs` Folder periodically as it contains the history of everything you copied across.
+
 ## Contributing
 
 > To get started...
