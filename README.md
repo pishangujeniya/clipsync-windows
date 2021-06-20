@@ -1,6 +1,6 @@
 # ClipSync
 
-<a href="https://github.com/pishangujeniya/clipsync-windows/"><img src="/images/clip_sync_logo_2.png" title="ClipSync" alt="ClipSync"></a>
+<a href="https://github.com/pishangujeniya/clipsync-windows/"><img src="./images/clip_sync_logo_2.png" title="ClipSync" alt="ClipSync"></a>
 
 A Common Clipboard tool between Windows and Android.
 ```
@@ -11,7 +11,7 @@ Paste in Android/Windows
 
 ## Download
 
-<a href="https://github.com/pishangujeniya/clipsync-windows/releases"><img src="/images/get_it_from_MS.png" title="ClipSync Windows" alt="ClipSync Windows" width="170px" height="60px"></a><a href="https://github.com/pishangujeniya/clipsync-android/releases"><img src="/images/get_it_on_google_play.png" title="ClipSync Android App" alt="ClipSync Android App" width="170px" height="60px"></a>
+<a href="https://github.com/pishangujeniya/clipsync-windows/releases"><img src="./images/get_it_from_MS.png" title="ClipSync Windows" alt="ClipSync Windows" width="170px" height="60px"></a><a href="https://github.com/pishangujeniya/clipsync-android/releases"><img src="./images/get_it_on_google_play.png" title="ClipSync Android App" alt="ClipSync Android App" width="170px" height="60px"></a>
 
 ## How to use?
 
@@ -25,7 +25,7 @@ Paste in Android/Windows
 
 ### Creating a ClipSync Server
 
-<img src="/images/ClipSync-Server-Creation.gif" title="ClipSync Server Creation" alt="ClipSync Server Creation">
+<img src="./images/ClipSync-Server-Creation.gif" title="ClipSync Server Creation" alt="ClipSync Server Creation">
 
 > Delete `Logs` Folder periodically as it contains the history of everything you copied across.
 
